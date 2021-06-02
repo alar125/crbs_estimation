@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Оценка кредитного риска банковского сектора</title>
+
+    <link type='text/css' href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='css/fonts.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='css/jquery-ui.min.css')}}" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <div id="page-wrapper">
+        <div class="box">
+            <div class="banner">
+                <h1>Выполните вход</h1>
+                <div class="logimg">
+                    <img src="{{url_for('static', filename='img/login.png')}}" alt=width="70" height="70">
+                </div>
+            </div>
+
+            <form>
+                <div class="options">
+                    <div class="dws-input">
+                        <input type="text" name="username" placeholder="Введите логин">
+                    </div>
+                    <div class="dws-input">
+                        <input type="password" name="password" placeholder="Введите пароль">
+                    </div><br />
+                </div>
+            </form>
+            <a href="calc.html" class="enter_button">
+                <img src="{{url_for('static', filename='img/sign_in.png')}}" alt=width="50" height="50">
+            </a>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/particles.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/app.js')}}"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/selector.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/input.js')}}"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/jquery-ui.min.js')}}"></script>
+    <script>
+        $("#datepicker").datepicker();
+    </script>
+
+</body>
+
+</html>

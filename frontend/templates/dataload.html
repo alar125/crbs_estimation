@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Оценка кредитного риска банковского сектора</title>
+
+    <link type='text/css' href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/fonts.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/jquery-ui.min.css') }}" rel="stylesheet"/>
+</head>
+
+<body>
+<div id="particles-js"></div>
+
+<div id="page-wrapper">
+    <!-- Header -->
+    <header class="navbar">
+        <div class="container">
+            <nav class="navbar-nav">
+                <ul>
+                    <li>
+                        <a href="calc.html">Расчет</a>
+                    </li>
+                    <li>
+                        <a href="report.html">Отчеты</a>
+                    </li>
+                    <li>
+                        <a href="dataload.html">Загрузка данных</a>
+                    </li>
+                </ul>
+                <div class="user">
+                    <div class="user__icon">
+                        <img src="{{ url_for('static', filename='img/user.png') }}" alt=width="20" height="20">
+                    </div>
+                    <a href="#" class="user__name">
+                        Пользователь
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <form action="/dataload.html" method="post" id="main_form">
+            <!-- Work section -->
+            <section class="section-padding">
+                <div class="container">
+                    <div class="services">
+
+                        <div class="service-col">
+                            <div class="service params">
+                                <h4 class="service-name">Загрузка данных банковской отчетности</h4>
+
+                                <div class="options__items">
+                                    <div class="date__title">Дата расчета</div>
+                                    <div class="calculation__date">
+                                        <input type="text_dt" id="datepicker" name='dt' class="selected__date"/>
+                                    </div>
+                                    <div class="calculation__object">Объект анализа</div>
+                                    <div class="select__banks">
+                                        <div class="select">
+                                            <select name="bank" id="bank">
+                                                <option selected disabled>Кредитная организация</option>
+                                                {% for id, name in banks %}
+                                                    <option value={{ id }}>{{ name }}</option>
+                                                {% endfor %}
+                                                {# <option value="pdf">Юникредит</option>#}
+                                                {# <option value="txt">Сбербанк</option>#}
+                                                {# <option value="epub">ВТБ</option>#}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="container">
+                                    <button class="button load" type="submit" formaction="/parse_data">
+                                        <span>Загрузка</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="service params">
+                                <h4 class="service-name">Загрузка данных сценариев</h4>
+
+                                <div class="container coo">
+                                    <div class="container">
+                                        <div class="horizon">
+                                            <div class="dt">Дата расчета</div>
+                                            <div class="calc_dt">
+                                                <input type="text_dt" id="datepicker " name="datetime"
+                                                       class="selected__date"/>
+                                            </div>
+                                            <div class="m__title">Горизонт моделирования</div>
+                                            <div class="m__horizon">
+                                                <input class="m__input" name='m_horizon' type="number" value="0"
+                                                       min="0">
+                                            </div>
+                                        </div>
+                                        <div class="title">Фактический</div>
+                                        <button class="button scen_calc" type="submit" form="main_form">
+                                            <span>Расчет</span>
+                                        </button>
+                                        <button class="button download" type="submit">
+                                            <span>Скачать файл</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="title">Негативный</div>
+                                        <button class="button download_pattern" formaction="/download_template"
+                                                type="submit">
+                                            <span>Скачать шаблон</span>
+                                        </button>
+                                        <button class="button load_to" type="submit">
+                                            <span>Загрузить файл</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="title">Позитивный</div>
+                                        <button class="button download_pattern" formaction="/download_template"
+                                                type="submit">
+                                            <span>Скачать шаблон</span>
+                                        </button>
+                                        <button class="button load_to" type="submit">
+                                            <span>Загрузить файл</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/particles.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/app.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/selector.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/input.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/datepicker.js') }}"></script>
+
+</div>
+</body>
+
+</html>

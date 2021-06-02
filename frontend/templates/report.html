@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Оценка кредитного риска банковского сектора</title>
+
+    <link type='text/css' href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/fonts.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/jquery-ui.min.css') }}" rel="stylesheet"/>
+
+</head>
+
+<body>
+<div id="particles-js"></div>
+
+<div id="page-wrapper">
+    <!-- Header -->
+    <header class="navbar">
+        <div class="container">
+            <nav class="navbar-nav">
+                <ul>
+                    <li>
+                        <a href="calc.html">Расчет</a>
+                    </li>
+                    <li>
+                        <a href="report.html">Отчеты</a>
+                    </li>
+                    <li>
+                        <a href="dataload.html">Загрузка данных</a>
+                    </li>
+                </ul>
+                <div class="user">
+                    <div class="user__icon">
+                        <img src="{{ url_for('static', filename='img/user.png') }}" alt=width="20" height="20">
+                    </div>
+                    <a href="#" class="user__name">
+                        Пользователь
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <form action="/report.html" method="post" id="main_form">
+            <input type="hidden" name="recompute" value=0 form="main_form">
+            {% if result['bank_stats'] | length == 0 %}
+                <section class="section-padding">
+                    <!-- Report's loading from DB-->
+                    <div class="container">
+                        <div class="services">
+                            <div class="service-col">
+                                <div class="service params">
+                                    <h4 class="service-name">Выбор параметров расчета</h4>
+                                    <div class="report__params">
+                                        <div class="date__title">Дата расчета</div>
+                                        <div class="r_date">
+                                            <input type="dt" id="datepicker" name="datepicker" class="selected__date"/>
+                                        </div>
+                                        <div class="scenario__title">Сценарий</div>
+                                        <form action="#" class="block-form">
+                                            <div class="r_scenario">
+                                                <div class="radiobuttons">
+                                                    <div class="radiobuttons__item">
+                                                        Фактический
+                                                        <input type="radio" value=2 name="scenarios">
+                                                    </div>
+                                                    <div class="radiobuttons__item">
+                                                        Негативный
+                                                        <input type="radio" value=3 name="scenarios">
+                                                    </div>
+                                                    <div class="radiobuttons__item">
+                                                        Позитивный
+                                                        <input type="radio" value=4 name="scenarios">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="banks__title">Банк</div>
+                                        <div class="rn">
+                                            <input class="reg__num" name="banks" type="number" value="0" min="0">
+                                        </div>
+                                        <div class="mh__title">Горизонт моделирования</div>
+                                        <div class="rm__horizon">
+                                            <input class="mh__input" name="mh" type="number" value="0" min="0">
+                                        </div>
+                                        <div class="hh__title">Исторический горизонт</div>
+                                        <div class="h__horizon">
+                                            <input class="mh__input" name="hh" type="number" value="0" min="0">
+                                        </div>
+                                        <div class="container">
+                                            <button class="button load_rep" form="main_form" type="submit">
+                                                <span>Загрузить отчет</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% else %}
+                {% for bank_id, values in result['bank_stats'].items() %}
+                    <!-- Report's hat section -->
+                    <section class="section-padding">
+                        <div class="container">
+                            <div class="services">
+                                <div class="service-col">
+                                    <div class="service params">
+                                        <h4 class="service-name">Основные результаты расчета</h4>
+                                        <div class="hat__items">
+                                            <div class="date__title">Дата расчета: {{ result['dt'] }}</div>
+                                            <div class="scenario__title">Сценарий: {{ result['scenario']|string }}</div>
+                                            <div class="banks__title">Банк: {{ bank_id }}</div>
+                                            <div class="mh__title">Горизонт
+                                                моделирования: {{ result['m_horizon'] }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Report's body-->
+                        <div class="container">
+                            <div class="services">
+                                <table class="main_report">
+                                    <tr>
+                                        <th></th>
+                                        {% for m_date in result['m_dates'] %}
+                                            <th>{{ m_date }}</th>
+                                        {% endfor %}
+                                    </tr>
+
+                                    <tr>
+                                        <td class="indicators">Объем потерь по кредитному риску</td>
+                                        {% for val in values['credit_loss'] %}
+                                            <td class="indicator_data">{{ '{:,}'.format(val|int) | replace(',', ' ') }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                    <tr>
+                                        <td class="indicators">Объем погашений ссудной задолженности</td>
+                                        {% for val in values['repay'] %}
+                                            <td class="indicator_data">{{ '{:,}'.format(val|int) | replace(',', ' ') }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="services">
+                                <div class="graph_col">
+                                    <h4>Динамика потерь по кредитному риску</h4>
+                                    <div class="graph">
+                                        <img src="{{ values['img_loss'] }}">
+                                    </div>
+                                </div>
+                                <div class="graph_col">
+                                    <h4>Динамика погашений ссудной задолженности</h4>
+                                    <div class="graph">
+                                        <img src="{{ values['img_repay'] }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="services">
+
+                            </div>
+                        </div>
+
+                        <!-- Report's download button -->
+                        <section class="section-button">
+                            <div class="container">
+                                <button class="button" type="submit"><span>Скачать отчет</span></button>
+                            </div>
+                        </section>
+                    </section>
+                {% endfor %}
+            {% endif %}
+        </form>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/particles.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/app.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/selector.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/input.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pjs/datepicker.js') }}"></script>
+
+</div>
+</body>
+
+</html>

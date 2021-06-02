@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Оценка кредитного риска банковского сектора</title>
+
+    <link type='text/css' href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet"/>
+    <link href="{{url_for('static', filename='css/fonts.css')}}" rel="stylesheet"/>
+    <link href="{{url_for('static', filename='css/jquery-ui.min.css')}}" rel="stylesheet"/>
+</head>
+
+<body>
+<div id="particles-js"></div>
+
+<div id="page-wrapper">
+    <!-- Header -->
+    <header class="navbar">
+        <div class="container">
+            <nav class="navbar-nav">
+                <ul>
+                    <li>
+                        <a href="calc.html">Расчет</a>
+                    </li>
+                    <li>
+                        <a href="report.html">Отчеты</a>
+                    </li>
+                    <li>
+                        <a href="dataload.html">Загрузка данных</a>
+                    </li>
+                </ul>
+
+                <div class="user">
+                    <div class="user__icon">
+                        <img src="{{url_for('static', filename='img/user.png')}}" alt=width="20" height="20">
+                    </div>
+                    <a href="#" class="user__name">
+                        Пользователь
+                    </a>
+                </div>
+
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <form action="/report.html" method="post" id="main_form">
+            <!-- Work section -->
+            <section class="section-padding">
+                <div class="container">
+                    <div class="services">
+                        <div class="service-col">
+                            <div class="service params">
+                                <h4 class="service-name">Ввод параметров</h4>
+
+                                <div class="options__items">
+                                    <div class="date__title">Дата расчета</div>
+                                    <div class="calculation__date">
+                                        <input type="text_dt" id="datepicker" class="selected__date" name="datepicker"/>
+                                    </div>
+                                    <div class="calculation__object">Объект анализа</div>
+                                    <div class="object-form__input">
+                                        <div class="radiobuttons">
+                                            <div class="radioobj__item">
+                                                Банк
+                                                <input type="radio" value=1 name="target" form="main_form">
+                                            </div>
+                                            <div class="radioobj__item">
+                                                Группа банков
+                                                <input type="radio" value=2 name="target" form="main_form">
+                                            </div>
+                                            <div class="radioobj__item">
+                                                Банковский сектор
+                                                <input type="radio" value=3 name="target" form="main_form">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modhor__title">Горизонт моделирования</div>
+                                    <div class="modeling__horizon">
+                                        <input name="mh" class="mh__input" type="number" value="0" min="0">
+                                    </div>
+                                    <div class="hist__title">Исторический горизонт</div>
+                                    <div class="historical__horizon">
+                                        <input name="hh" class="hh__input" type="number" value="8" min="8">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-col">
+                            <div class="service banks">
+                                <h4 class="service-name">Выбор банков</h4>
+
+                                <div class="gb__items">
+                                    <!--здесь должен быть список КО из БД-->
+                                    {% for id, name in banks %}
+                                    <div class="checkbox">
+                                        {{ name }}
+                                        <input type="checkbox" name="banks" value={{ id }}>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="service-col">
+                            <div class="service scenario">
+                                <h4 class="service-name">Выбор сценария</h4>
+                                <div class="block-form__input">
+                                    <div class="radiobuttons">
+                                        <div class="radiobuttons__item">
+                                            Фактический
+                                            <input type="radio" name="scenarios" value=2 form="main_form">
+                                        </div>
+                                        <div class="radiobuttons__item">
+                                            Негативный
+                                            <input type="radio" name="scenarios" value=3 form="main_form">
+                                        </div>
+                                        <div class="radiobuttons__item">
+                                            Позитивный
+                                            <input type="radio" name="scenarios" value=4 form="main_form">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Hidden param -->
+                <input type="hidden" name="recompute" value=1 form="main_form">
+
+                <!-- Calculation button -->
+                <section class="section-button">
+                    <div class="container">
+                        <button class="button" type="submit" form="main_form"><span>Рассчитать</span></button>
+                    </div>
+                </section>
+
+            </section>
+        </form>
+
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/particles.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/app.js')}}"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/selector.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/input.js')}}"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/jquery-ui.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='pjs/datepicker.js')}}"></script>
+
+</div>
+</body>
+
+</html>
